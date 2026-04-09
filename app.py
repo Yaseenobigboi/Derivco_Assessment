@@ -76,6 +76,8 @@ def feed():
 
 @app.route('/dashboard')
 def dashboard():
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
     projects = conn.execute('SELECT * FROM projects WHERE user_id = ?', (session.get('user_id'),)).fetchall()
