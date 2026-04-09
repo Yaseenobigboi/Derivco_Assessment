@@ -34,5 +34,12 @@ def init_db():
             body TEXT NOT NULL
         )
     ''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS collaboration_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL
+        )
+    ''')
     conn.commit()
     conn.close()

@@ -23,5 +23,15 @@
     {% if not projects %}
         <p>You have no projects yet. <a href="/projects/create">Create one</a></p>
     {% endif %}
+
+    <h2>Collaboration Requests</h2>
+
+    {% for req in collab_requests %}
+        <p><strong>{{ req['username'] }}</strong> wants to collaborate on <a href="/projects/{{ req['project_id'] }}">{{ req['title'] }}</a></p>
+    {% endfor %}
+
+    {% if not collab_requests %}
+        <p>No collaboration requests yet.</p>
+    {% endif %}
 </body>
 </html>

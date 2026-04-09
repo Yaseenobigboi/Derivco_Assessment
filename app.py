@@ -79,8 +79,15 @@ def dashboard():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
     projects = conn.execute('SELECT * FROM projects WHERE user_id = ?', (session.get('user_id'),)).fetchall()
+    collab_requests = conn.execute('''
+        SELECT collaboration_requests.*, users.username, projects.title
+        FROM collaboration_requests
+        JOIN users ON collaboration_requests.user_id = users.id
+        JOIN projects ON collaboration_requests.project_id = projects.id
+        WHERE projects.user_id = ?
+    ''', (session.get('user_id'),)).fetchall()
     conn.close()
-    return render_template('dashboard.html', username=session.get('username'), projects=projects)
+    return render_template('dashboard.html', username=session.get('username'), projects=projects, collab_requests=collab_requests)
 
 
 @app.route('/projects/create', methods=['GET', 'POST'])
@@ -136,6 +143,20 @@ def add_comment(project_id):
     conn.execute(
         'INSERT INTO comments (project_id, user_id, body) VALUES (?, ?, ?)',
         (project_id, session['user_id'], body)
+    )
+    conn.commit()
+    conn.close()
+    return redirect(url_for('project_detail', project_id=project_id))
+
+
+@app.route('/projects/<int:project_id>/request-collaboration', methods=['POST'])
+def request_collaboration(project_id):
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    conn = sqlite3.connect(DATABASE)
+    conn.execute(
+        'INSERT INTO collaboration_requests (project_id, user_id) VALUES (?, ?)',
+        (project_id, session['user_id'])
     )
     conn.commit()
     conn.close()
