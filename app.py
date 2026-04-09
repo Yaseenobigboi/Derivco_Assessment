@@ -103,6 +103,24 @@ def create_project():
     return render_template('create_project.html')
 
 
+@app.route('/projects/<int:project_id>')
+def project_detail(project_id):
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    project = conn.execute('''
+        SELECT projects.*, users.username
+        FROM projects
+        JOIN users ON projects.user_id = users.id
+        WHERE projects.id = ?
+    ''', (project_id,)).fetchone()
+    conn.close()
+    if project is None:
+        return 'Project not found', 404
+    return render_template('project_detail.html', project=project)
+
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
