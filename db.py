@@ -26,5 +26,13 @@ def init_db():
             completed INTEGER DEFAULT 0
         )
     ''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS comments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            body TEXT NOT NULL
+        )
+    ''')
     conn.commit()
     conn.close()

@@ -115,10 +115,31 @@ def project_detail(project_id):
         JOIN users ON projects.user_id = users.id
         WHERE projects.id = ?
     ''', (project_id,)).fetchone()
+    comments = conn.execute('''
+        SELECT comments.*, users.username
+        FROM comments
+        JOIN users ON comments.user_id = users.id
+        WHERE comments.project_id = ?
+    ''', (project_id,)).fetchall()
     conn.close()
     if project is None:
         return 'Project not found', 404
-    return render_template('project_detail.html', project=project)
+    return render_template('project_detail.html', project=project, comments=comments)
+
+
+@app.route('/projects/<int:project_id>/comment', methods=['POST'])
+def add_comment(project_id):
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    body = request.form['body']
+    conn = sqlite3.connect(DATABASE)
+    conn.execute(
+        'INSERT INTO comments (project_id, user_id, body) VALUES (?, ?, ?)',
+        (project_id, session['user_id'], body)
+    )
+    conn.commit()
+    conn.close()
+    return redirect(url_for('project_detail', project_id=project_id))
 
 
 if __name__ == '__main__':
