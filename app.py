@@ -57,6 +57,23 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route('/feed')
+def feed():
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    projects = conn.execute('''
+        SELECT projects.*, users.username
+        FROM projects
+        JOIN users ON projects.user_id = users.id
+        WHERE projects.completed = 0
+        ORDER BY projects.id DESC
+    ''').fetchall()
+    conn.close()
+    return render_template('feed.html', projects=projects)
+
+
 @app.route('/dashboard')
 def dashboard():
     conn = sqlite3.connect(DATABASE)

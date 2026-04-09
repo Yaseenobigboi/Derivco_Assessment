@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feed - MzansiBuilds</title>
+</head>
+<body>
+    <h1>Developer Feed</h1>
+
+    <a href="/dashboard">Dashboard</a>
+    <a href="/logout">Logout</a>
+
+    {% for project in projects %}
+        <div>
+            <a href="/projects/{{ project['id'] }}"><strong>{{ project['title'] }}</strong></a>
+            <p>by {{ project['username'] }} — {{ project['stage'] }}</p>
+            <p>{{ project['description'] }}</p>
+        </div>
+    {% endfor %}
+
+    {% if not projects %}
+        <p>No projects yet.</p>
+    {% endif %}
+</body>
+</html>
