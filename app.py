@@ -59,8 +59,31 @@ def logout():
 
 @app.route('/dashboard')
 def dashboard():
-    # placeholder - will be fully built in stage 3
-    return 'Dashboard coming soon'
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    projects = conn.execute('SELECT * FROM projects WHERE user_id = ?', (session.get('user_id'),)).fetchall()
+    conn.close()
+    return render_template('dashboard.html', username=session.get('username'), projects=projects)
+
+
+@app.route('/projects/create', methods=['GET', 'POST'])
+def create_project():
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        title = request.form['title']
+        description = request.form['description']
+        stage = request.form['stage']
+        support_required = request.form['support_required']
+        conn = sqlite3.connect(DATABASE)
+        conn.execute(
+            'INSERT INTO projects (user_id, title, description, stage, support_required) VALUES (?, ?, ?, ?, ?)',
+            (session['user_id'], title, description, stage, support_required)
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for('dashboard'))
+    return render_template('create_project.html')
 
 
 if __name__ == '__main__':
