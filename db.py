@@ -14,5 +14,17 @@ def init_db():
             password TEXT NOT NULL
         )
     ''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS projects (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            title TEXT NOT NULL,
+            description TEXT,
+            stage TEXT,
+            support_required TEXT,
+            progress INTEGER DEFAULT 0,
+            completed INTEGER DEFAULT 0
+        )
+    ''')
     conn.commit()
     conn.close()
