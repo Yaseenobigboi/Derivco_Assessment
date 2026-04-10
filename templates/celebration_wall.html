@@ -3,24 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Celebration Wall - MzansiBuilds</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Celebration Wall</h1>
-    <p>Projects that made it all the way!</p>
+    <nav>
+        <a href="/">MzansiBuilds</a>
+        <a href="/feed">Developer Feed</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </nav>
 
-    <a href="/feed">Developer Feed</a>
-    <a href="/dashboard">Dashboard</a>
+    <div class="page">
+        <h1>Celebration Wall</h1>
+        <p>Projects that made it all the way!</p>
 
-    {% for project in projects %}
-        <div>
-            <a href="/projects/{{ project['id'] }}"><strong>{{ project['title'] }}</strong></a>
-            <p>by {{ project['username'] }}</p>
-            <p>{{ project['description'] }}</p>
-        </div>
-    {% endfor %}
+        {% for project in projects %}
+            <div class="card">
+                <a href="/projects/{{ project['id'] }}"><strong>{{ project['title'] }}</strong></a>
+                <p>by {{ project['username'] }}</p>
+                <p>{{ project['description'] }}</p>
+            </div>
+        {% endfor %}
 
-    {% if not projects %}
-        <p>No completed projects yet. Be the first!</p>
-    {% endif %}
+        {% if not projects %}
+            <p>No completed projects yet. Be the first!</p>
+        {% endif %}
+    </div>
 </body>
 </html>

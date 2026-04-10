@@ -3,23 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Feed - MzansiBuilds</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Developer Feed</h1>
+    <nav>
+        <a href="/">MzansiBuilds</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/celebration-wall">Celebration Wall</a>
+        <a href="/logout">Logout</a>
+    </nav>
 
-    <a href="/dashboard">Dashboard</a>
-    <a href="/logout">Logout</a>
+    <div class="page">
+        <h1>Developer Feed</h1>
 
-    {% for project in projects %}
-        <div>
-            <a href="/projects/{{ project['id'] }}"><strong>{{ project['title'] }}</strong></a>
-            <p>by {{ project['username'] }} — {{ project['stage'] }}</p>
-            <p>{{ project['description'] }}</p>
-        </div>
-    {% endfor %}
+        {% for project in projects %}
+            <div class="card">
+                <a href="/projects/{{ project['id'] }}"><strong>{{ project['title'] }}</strong></a>
+                <p>by {{ project['username'] }} — {{ project['stage'] }}</p>
+                <p>{{ project['description'] }}</p>
+            </div>
+        {% endfor %}
 
-    {% if not projects %}
-        <p>No projects yet.</p>
-    {% endif %}
+        {% if not projects %}
+            <p>No projects yet.</p>
+        {% endif %}
+    </div>
 </body>
 </html>

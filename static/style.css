@@ -1,0 +1,116 @@
+/* this must define the green, white, black theme for the whole app */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #ffffff;
+    color: #111111;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+nav {
+    background-color: #1a7a1a;
+    padding: 12px 24px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+main, .page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    color: #1a7a1a;
+    margin-bottom: 16px;
+}
+
+h2 {
+    color: #111111;
+    margin: 24px 0 12px;
+}
+
+p {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+a {
+    color: #1a7a1a;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 16px 0;
+    max-width: 400px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+textarea {
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 100%;
+}
+
+textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+button[type="submit"] {
+    background-color: #1a7a1a;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+button[type="submit"]:hover {
+    background-color: #155e15;
+}
+
+.card {
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.card:hover {
+    border-color: #1a7a1a;
+}
+
+.error {
+    color: #cc0000;
+    margin-bottom: 12px;
+}

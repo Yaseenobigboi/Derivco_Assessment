@@ -3,35 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard - MzansiBuilds</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Welcome, {{ username }}</h1>
+    <nav>
+        <a href="/">MzansiBuilds</a>
+        <a href="/feed">Developer Feed</a>
+        <a href="/celebration-wall">Celebration Wall</a>
+        <a href="/logout">Logout</a>
+    </nav>
 
-    <a href="/projects/create">+ New Project</a>
-    <a href="/feed">Developer Feed</a>
-    <a href="/logout">Logout</a>
+    <div class="page">
+        <h1>Welcome, {{ username }}</h1>
 
-    <h2>Your Projects</h2>
+        <a href="/projects/create">+ New Project</a>
 
-    {% for project in projects %}
-        <div>
-            <a href="/projects/{{ project['id'] }}"><strong>{{ project['title'] }}</strong></a>
-            <p>{{ project['stage'] }} — {{ project['support_required'] }}</p>
-        </div>
-    {% endfor %}
+        <h2>Your Projects</h2>
 
-    {% if not projects %}
-        <p>You have no projects yet. <a href="/projects/create">Create one</a></p>
-    {% endif %}
+        {% for project in projects %}
+            <div class="card">
+                <a href="/projects/{{ project['id'] }}"><strong>{{ project['title'] }}</strong></a>
+                <p>{{ project['stage'] }} — {{ project['support_required'] }}</p>
+                <p>Progress: {{ project['progress'] }}%</p>
+            </div>
+        {% endfor %}
 
-    <h2>Collaboration Requests</h2>
+        {% if not projects %}
+            <p>You have no projects yet. <a href="/projects/create">Create one</a></p>
+        {% endif %}
 
-    {% for req in collab_requests %}
-        <p><strong>{{ req['username'] }}</strong> wants to collaborate on <a href="/projects/{{ req['project_id'] }}">{{ req['title'] }}</a></p>
-    {% endfor %}
+        <h2>Collaboration Requests</h2>
 
-    {% if not collab_requests %}
-        <p>No collaboration requests yet.</p>
-    {% endif %}
+        {% for req in collab_requests %}
+            <div class="card">
+                <p><strong>{{ req['username'] }}</strong> wants to collaborate on <a href="/projects/{{ req['project_id'] }}">{{ req['title'] }}</a></p>
+            </div>
+        {% endfor %}
+
+        {% if not collab_requests %}
+            <p>No collaboration requests yet.</p>
+        {% endif %}
+    </div>
 </body>
 </html>

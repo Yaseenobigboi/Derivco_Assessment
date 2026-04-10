@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Register - MzansiBuilds</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Create an Account</h1>
+    <nav>
+        <a href="/">MzansiBuilds</a>
+        <a href="/login">Login</a>
+    </nav>
 
-    <p>{{ error if error }}</p>
+    <div class="page">
+        <h1>Create an Account</h1>
 
-    <form method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Register</button>
-    </form>
+        <p class="error">{{ error if error }}</p>
 
-    <a href="/login">Already have an account? Login</a>
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Register</button>
+        </form>
+
+        <p><a href="/login">Already have an account? Login</a></p>
+    </div>
 </body>
 </html>

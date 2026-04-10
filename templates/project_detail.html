@@ -3,68 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ project['title'] }} - MzansiBuilds</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <a href="/feed">Back to Feed</a>
+    <nav>
+        <a href="/">MzansiBuilds</a>
+        <a href="/feed">Developer Feed</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </nav>
 
-    <h1>{{ project['title'] }}</h1>
-    <p>by {{ project['username'] }}</p>
-    <p>{{ project['description'] }}</p>
-    <p>Stage: {{ project['stage'] }}</p>
-    <p>Support needed: {{ project['support_required'] }}</p>
-    <p>Progress: {{ project['progress'] }}%</p>
+    <div class="page">
+        <p><a href="/feed">← Back to Feed</a></p>
 
-    {% if project['user_id'] == session['user_id'] %}
-        <form method="POST" action="/projects/{{ project['id'] }}/update-progress">
-            <input type="number" name="progress" placeholder="Progress %">
-            <button type="submit">Update Progress</button>
-        </form>
+        <h1>{{ project['title'] }}</h1>
+        <p>by {{ project['username'] }}</p>
+        <p>{{ project['description'] }}</p>
+        <p>Stage: {{ project['stage'] }}</p>
+        <p>Support needed: {{ project['support_required'] }}</p>
+        <p>Progress: {{ project['progress'] }}%</p>
 
-        {% if project['completed'] == 0 %}
-            <form method="POST" action="/projects/{{ project['id'] }}/complete">
-                <button type="submit">Mark as Complete</button>
+        {% if project['user_id'] == session['user_id'] %}
+            <form method="POST" action="/projects/{{ project['id'] }}/update-progress">
+                <input type="number" name="progress" placeholder="Progress %">
+                <button type="submit">Update Progress</button>
             </form>
-        {% else %}
-            <p>This project is complete!</p>
+
+            {% if project['completed'] == 0 %}
+                <form method="POST" action="/projects/{{ project['id'] }}/complete">
+                    <button type="submit">Mark as Complete</button>
+                </form>
+            {% else %}
+                <p>This project is complete!</p>
+            {% endif %}
         {% endif %}
-    {% endif %}
 
-    <h2>Milestones</h2>
+        <h2>Milestones</h2>
 
-    {% for milestone in milestones %}
-        <p>✓ {{ milestone['description'] }}</p>
-    {% endfor %}
+        {% for milestone in milestones %}
+            <p>✓ {{ milestone['description'] }}</p>
+        {% endfor %}
 
-    {% if not milestones %}
-        <p>No milestones yet.</p>
-    {% endif %}
+        {% if not milestones %}
+            <p>No milestones yet.</p>
+        {% endif %}
 
-    {% if project['user_id'] == session['user_id'] %}
-        <form method="POST" action="/projects/{{ project['id'] }}/add-milestone">
-            <input type="text" name="description" placeholder="Milestone achieved..." required>
-            <button type="submit">Add Milestone</button>
+        {% if project['user_id'] == session['user_id'] %}
+            <form method="POST" action="/projects/{{ project['id'] }}/add-milestone">
+                <input type="text" name="description" placeholder="Milestone achieved..." required>
+                <button type="submit">Add Milestone</button>
+            </form>
+        {% endif %}
+
+        {% if project['user_id'] != session['user_id'] %}
+            <form method="POST" action="/projects/{{ project['id'] }}/request-collaboration">
+                <button type="submit">Request Collaboration</button>
+            </form>
+        {% endif %}
+
+        <h2>Comments</h2>
+
+        {% for comment in comments %}
+            <div class="card">
+                <p><strong>{{ comment['username'] }}</strong>: {{ comment['body'] }}</p>
+            </div>
+        {% endfor %}
+
+        {% if not comments %}
+            <p>No comments yet.</p>
+        {% endif %}
+
+        <form method="POST" action="/projects/{{ project['id'] }}/comment">
+            <textarea name="body" placeholder="Leave a comment..." required></textarea>
+            <button type="submit">Post Comment</button>
         </form>
-    {% endif %}
-
-    {% if project['user_id'] != session['user_id'] %}
-        <form method="POST" action="/projects/{{ project['id'] }}/request-collaboration">
-            <button type="submit">Request Collaboration</button>
-        </form>
-    {% endif %}
-
-    <h2>Comments</h2>
-
-    {% for comment in comments %}
-        <p><strong>{{ comment['username'] }}</strong>: {{ comment['body'] }}</p>
-    {% endfor %}
-
-    {% if not comments %}
-        <p>No comments yet.</p>
-    {% endif %}
-
-    <form method="POST" action="/projects/{{ project['id'] }}/comment">
-        <textarea name="body" placeholder="Leave a comment..." required></textarea>
-        <button type="submit">Post Comment</button>
-    </form>
+    </div>
 </body>
 </html>
