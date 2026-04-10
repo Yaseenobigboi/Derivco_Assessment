@@ -130,10 +130,13 @@ def project_detail(project_id):
         JOIN users ON comments.user_id = users.id
         WHERE comments.project_id = ?
     ''', (project_id,)).fetchall()
+    milestones = conn.execute(
+        'SELECT * FROM milestones WHERE project_id = ?', (project_id,)
+    ).fetchall()
     conn.close()
     if project is None:
         return 'Project not found', 404
-    return render_template('project_detail.html', project=project, comments=comments)
+    return render_template('project_detail.html', project=project, comments=comments, milestones=milestones)
 
 
 @app.route('/projects/<int:project_id>/comment', methods=['POST'])
@@ -159,6 +162,36 @@ def request_collaboration(project_id):
     conn.execute(
         'INSERT INTO collaboration_requests (project_id, user_id) VALUES (?, ?)',
         (project_id, session['user_id'])
+    )
+    conn.commit()
+    conn.close()
+    return redirect(url_for('project_detail', project_id=project_id))
+
+
+@app.route('/projects/<int:project_id>/add-milestone', methods=['POST'])
+def add_milestone(project_id):
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    description = request.form['description']
+    conn = sqlite3.connect(DATABASE)
+    conn.execute(
+        'INSERT INTO milestones (project_id, description) VALUES (?, ?)',
+        (project_id, description)
+    )
+    conn.commit()
+    conn.close()
+    return redirect(url_for('project_detail', project_id=project_id))
+
+
+@app.route('/projects/<int:project_id>/update-progress', methods=['POST'])
+def update_progress(project_id):
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    progress = request.form['progress']
+    conn = sqlite3.connect(DATABASE)
+    conn.execute(
+        'UPDATE projects SET progress = ? WHERE id = ?',
+        (progress, project_id)
     )
     conn.commit()
     conn.close()
