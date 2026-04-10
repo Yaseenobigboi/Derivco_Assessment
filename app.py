@@ -187,7 +187,9 @@ def add_milestone(project_id):
 def update_progress(project_id):
     if not session.get('user_id'):
         return redirect(url_for('login'))
-    progress = request.form['progress']
+    progress = int(request.form['progress'])
+    if progress < 0 or progress > 100:
+        progress = max(0, min(100, progress))
     conn = sqlite3.connect(DATABASE)
     conn.execute(
         'UPDATE projects SET progress = ? WHERE id = ?',
