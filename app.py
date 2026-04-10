@@ -200,6 +200,20 @@ def update_progress(project_id):
     return redirect(url_for('project_detail', project_id=project_id))
 
 
+@app.route('/projects/<int:project_id>/complete', methods=['POST'])
+def complete_project(project_id):
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    conn = sqlite3.connect(DATABASE)
+    conn.execute(
+        'UPDATE projects SET completed = 1, progress = 100 WHERE id = ?',
+        (project_id,)
+    )
+    conn.commit()
+    conn.close()
+    return redirect(url_for('celebration_wall'))
+
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)

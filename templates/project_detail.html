@@ -19,6 +19,14 @@
             <input type="number" name="progress" placeholder="Progress %">
             <button type="submit">Update Progress</button>
         </form>
+
+        {% if project['completed'] == 0 %}
+            <form method="POST" action="/projects/{{ project['id'] }}/complete">
+                <button type="submit">Mark as Complete</button>
+            </form>
+        {% else %}
+            <p>This project is complete!</p>
+        {% endif %}
     {% endif %}
 
     <h2>Milestones</h2>
