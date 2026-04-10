@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Celebration Wall - MzansiBuilds</title>
+</head>
+<body>
+    <h1>Celebration Wall</h1>
+    <p>Projects that made it all the way!</p>
+
+    <a href="/feed">Developer Feed</a>
+    <a href="/dashboard">Dashboard</a>
+
+    {% for project in projects %}
+        <div>
+            <a href="/projects/{{ project['id'] }}"><strong>{{ project['title'] }}</strong></a>
+            <p>by {{ project['username'] }}</p>
+            <p>{{ project['description'] }}</p>
+        </div>
+    {% endfor %}
+
+    {% if not projects %}
+        <p>No completed projects yet. Be the first!</p>
+    {% endif %}
+</body>
+</html>

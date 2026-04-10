@@ -214,6 +214,23 @@ def complete_project(project_id):
     return redirect(url_for('celebration_wall'))
 
 
+@app.route('/celebration-wall')
+def celebration_wall():
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    projects = conn.execute('''
+        SELECT projects.*, users.username
+        FROM projects
+        JOIN users ON projects.user_id = users.id
+        WHERE projects.completed = 1
+        ORDER BY projects.id DESC
+    ''').fetchall()
+    conn.close()
+    return render_template('celebration_wall.html', projects=projects)
+
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
