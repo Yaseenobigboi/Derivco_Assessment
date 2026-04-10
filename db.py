@@ -41,5 +41,12 @@ def init_db():
             user_id INTEGER NOT NULL
         )
     ''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS milestones (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL,
+            description TEXT NOT NULL
+        )
+    ''')
     conn.commit()
     conn.close()
